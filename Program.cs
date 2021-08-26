@@ -40,19 +40,19 @@ namespace TicTacNo
 
             public void Display()
             {
-                Console.WriteLine("┌───┬───┬───┐");
-                Console.WriteLine("│   │   │   │");
-                Console.WriteLine("│ {0} │ {1} │ {2} │", Board[0], Board[1], Board[2]);
-                Console.WriteLine("│   │   │   │");
-                Console.WriteLine("├───┼───┼───┤");
-                Console.WriteLine("│   │   │   │");
-                Console.WriteLine("│ {0} │ {1} │ {2} │", Board[3], Board[4], Board[5]);
-                Console.WriteLine("│   │   │   │");
-                Console.WriteLine("├───┼───┼───┤");
-                Console.WriteLine("│   │   │   │");
-                Console.WriteLine("│ {0} │ {1} │ {2} │", Board[6], Board[7], Board[8]);
-                Console.WriteLine("│   │   │   │");
-                Console.WriteLine("└───┴───┴───┘");
+                Console.WriteLine("┌─────┬─────┬─────┐");
+                Console.WriteLine("│     │     │     │");
+                Console.WriteLine("│  {0}  │  {1}  │  {2}  │", Board[0], Board[1], Board[2]);
+                Console.WriteLine("│     │     │     │");
+                Console.WriteLine("├─────┼─────┼─────┤");
+                Console.WriteLine("│     │     │     │");
+                Console.WriteLine("│  {0}  │  {1}  │  {2}  │", Board[3], Board[4], Board[5]);
+                Console.WriteLine("│     │     │     │");
+                Console.WriteLine("├─────┼─────┼─────┤");
+                Console.WriteLine("│     │     │     │");
+                Console.WriteLine("│  {0}  │  {1}  │  {2}  │", Board[6], Board[7], Board[8]);
+                Console.WriteLine("│     │     │     │");
+                Console.WriteLine("└─────┴─────┴─────┘");
             }
 
             public void SetPlayer(Piece Player)
@@ -169,6 +169,7 @@ namespace TicTacNo
             while (playing)
             {
                 game.ResetBoard();
+                game.Display();
                 bool gameOver = false;
                 string winner = "";
 
