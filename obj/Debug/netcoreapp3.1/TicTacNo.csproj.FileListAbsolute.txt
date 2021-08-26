@@ -1,0 +1,14 @@
+C:\Users\dylan.risso\source\repos\TicTacNo\TicTacNo\bin\Debug\netcoreapp3.1\TicTacNo.exe
+C:\Users\dylan.risso\source\repos\TicTacNo\TicTacNo\bin\Debug\netcoreapp3.1\TicTacNo.deps.json
+C:\Users\dylan.risso\source\repos\TicTacNo\TicTacNo\bin\Debug\netcoreapp3.1\TicTacNo.runtimeconfig.json
+C:\Users\dylan.risso\source\repos\TicTacNo\TicTacNo\bin\Debug\netcoreapp3.1\TicTacNo.runtimeconfig.dev.json
+C:\Users\dylan.risso\source\repos\TicTacNo\TicTacNo\bin\Debug\netcoreapp3.1\TicTacNo.dll
+C:\Users\dylan.risso\source\repos\TicTacNo\TicTacNo\bin\Debug\netcoreapp3.1\TicTacNo.pdb
+C:\Users\dylan.risso\source\repos\TicTacNo\TicTacNo\obj\Debug\netcoreapp3.1\TicTacNo.csproj.AssemblyReference.cache
+C:\Users\dylan.risso\source\repos\TicTacNo\TicTacNo\obj\Debug\netcoreapp3.1\TicTacNo.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\dylan.risso\source\repos\TicTacNo\TicTacNo\obj\Debug\netcoreapp3.1\TicTacNo.AssemblyInfoInputs.cache
+C:\Users\dylan.risso\source\repos\TicTacNo\TicTacNo\obj\Debug\netcoreapp3.1\TicTacNo.AssemblyInfo.cs
+C:\Users\dylan.risso\source\repos\TicTacNo\TicTacNo\obj\Debug\netcoreapp3.1\TicTacNo.csproj.CoreCompileInputs.cache
+C:\Users\dylan.risso\source\repos\TicTacNo\TicTacNo\obj\Debug\netcoreapp3.1\TicTacNo.dll
+C:\Users\dylan.risso\source\repos\TicTacNo\TicTacNo\obj\Debug\netcoreapp3.1\TicTacNo.pdb
+C:\Users\dylan.risso\source\repos\TicTacNo\TicTacNo\obj\Debug\netcoreapp3.1\TicTacNo.genruntimeconfig.cache
