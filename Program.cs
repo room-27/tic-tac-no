@@ -1,6 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using MoreLinq;
 
 namespace TicTacNo
 {
@@ -21,6 +22,9 @@ namespace TicTacNo
 
             public Piece Turn = Piece.X;
             int Choice = 0;
+            int RandChoice = 0;
+            public int Steps = 0;
+            public int ComputerEgo = 0;
 
             public Piece Computer;
             public Piece Player;
@@ -40,7 +44,7 @@ namespace TicTacNo
 
             public void Display()
             {
-                Console.WriteLine("┌─────┬─────┬─────┐");
+                Console.WriteLine("\n┌─────┬─────┬─────┐");
                 Console.WriteLine("│     │     │     │");
                 Console.WriteLine("│  {0}  │  {1}  │  {2}  │", Board[0], Board[1], Board[2]);
                 Console.WriteLine("│     │     │     │");
@@ -70,15 +74,41 @@ namespace TicTacNo
                 }
                 else if (Turn == Computer)
                 {
-                    Minimax(Copy(Board), false);
+                    Minimax(Copy(Board), false, Steps);
                     Board = SetBoard(Board, Turn, Choice);
                     Turn = SwitchPiece(Turn);
                 }
                 Display();
+
+                //
+                //Console.WriteLine(ComputerEgo.ToString());
+                //Console.WriteLine(Steps.ToString());
+                //
             }
 
-            float Minimax(Piece[] InputBoard, bool isMinimising)
+            public void Complacency(int computerEgo)
             {
+                if (Steps == 9)
+                {
+                    return;
+                }
+                else if (Steps == 0)
+                {
+                    if (computerEgo == -1) Steps++;
+                }
+                else if (Steps == 8)
+                {
+                    if (computerEgo == 1) Steps--;
+                }
+                else
+                {
+                    Steps -= computerEgo;
+                }
+                ComputerEgo = 0;
+            }
+
+            float Minimax(Piece[] InputBoard, bool isMinimising, int steps)
+            {   
                 Piece[] BoardCopy = Copy(InputBoard);
 
                 if (CheckWin(BoardCopy, Player)) return 10f;
@@ -96,20 +126,33 @@ namespace TicTacNo
                     if (BoardCopy[i] == Piece._)
                     {
                         BoardCopy[i] = isMinimising ? Player : SwitchPiece(Player);
-                        float score = Minimax(BoardCopy, !isMinimising);
+                        if (steps < 1)
+                        {
+                            Random rnd = new Random();
+                            RandChoice = rnd.Next(0, 9);
+                            return -20;
+                        }
+                        float score = Minimax(BoardCopy, !isMinimising, steps - 1);
                         BoardCopy[i] = Piece._;
                         scoreList.Add(score);
                         moveList.Add(i);
                     }
                 }
+
+                var dict = moveList.Zip(scoreList, (k, v) => new { k, v })
+                                   .ToDictionary(x => x.k, x => x.v);
+
                 if (isMinimising)
                 {
-                    int HighscoreIndex = scoreList.IndexOf(scoreList.Max());
-                    Choice = (int)moveList[HighscoreIndex];
+                    var highestMove = dict.MaxBy(x => x.Value).FirstOrDefault().Key;
+                    Choice = scoreList.Max() > -20 ? (int)highestMove : RandChoice;
+                    //Console.WriteLine($"MA-{Choice}");
                     return scoreList.Max();
                 }
-                int LowscoreIndex = scoreList.IndexOf(scoreList.Min());
-                Choice = (int)moveList[LowscoreIndex];
+
+                var lowestMove = dict.MinBy(x => x.Value).FirstOrDefault().Key;
+                Choice = (int)lowestMove;
+                //Console.WriteLine($"MI-{Choice}");
                 return scoreList.Min();
             }
 
@@ -161,35 +204,55 @@ namespace TicTacNo
             }
 
         }
+
+        static Random rnd = new Random();
         static void Main(string[] args)
         {
             bool playing = true;
             Game game = new Game();
 
+            Console.Write("\nPick a starting difficulty (1/2/3): ");
+            string difficulty = Console.ReadLine();
+
+            switch (difficulty)
+            {
+                case "1":
+                    {
+                        game.Steps = 3;
+                        Console.Write("\nDifficulty Level 1");
+                        break;
+                    }
+                case "2":
+                    {
+                        game.Steps = 5;
+                        Console.Write("\nDifficulty Level 2");
+                        break;
+                    }
+                case "3":
+                    {
+                        game.Steps = 9;
+                        Console.Write("\nDifficulty Level 3");
+                        break;
+                    }
+                default:
+                    {
+                        game.Steps = rnd.Next(0, 8);
+                        Console.Write("\nRandom Difficulty Level chosen");
+                        break;
+                    }
+            }
+
             while (playing)
             {
                 game.ResetBoard();
-                game.Display();
+                
                 bool gameOver = false;
                 string winner = "";
+                
+                game.Display();
 
                 while (!gameOver)
                 {
-                    if (Game.CheckWin(game.Board, game.Player))
-                    {
-                        winner = "Player";
-                        break;
-                    }
-                    if (Game.CheckWin(game.Board, game.Computer))
-                    {
-                        winner = "Computer";
-                        break;
-                    }
-                    if (Game.CheckGameOver(game.Board))
-                    {
-                        break;
-                    }
-
                     bool inputCorrect;
                     int input = 0;
 
@@ -226,26 +289,69 @@ namespace TicTacNo
                             inputCorrect = false;
                             continue;
                         }
-
                     }
                     while (!inputCorrect);
 
                     //Player
                     game.Play(input - 1);
 
+                    if (Game.CheckWin(game.Board, game.Player))
+                    {
+                        winner = "Player";
+                        break;
+                    }
+                    if (Game.CheckWin(game.Board, game.Computer))
+                    {
+                        winner = "Computer";
+                        break;
+                    }
+                    if (Game.CheckGameOver(game.Board))
+                    {
+                        break;
+                    }
+
                     //Computer
                     Console.WriteLine($"\n{game.Computer}'s turn.");
                     game.Play(0);
+
+                    if (Game.CheckWin(game.Board, game.Player))
+                    {
+                        winner = "Player";
+                        break;
+                    }
+                    if (Game.CheckWin(game.Board, game.Computer))
+                    {
+                        winner = "Computer";
+                        break;
+                    }
+                    if (Game.CheckGameOver(game.Board))
+                    {
+                        break;
+                    }
                 }
 
-                if (!string.IsNullOrEmpty(winner))
+                if (winner == "Player")
                 {
-                    Console.WriteLine($"The winner is {winner}!");
+                    Console.WriteLine("The winner is Player!");
+                    
+                    int egoDecrease = Convert.ToBoolean(rnd.Next(0, (int)Math.Round(1.0 + ((double)game.Steps / 2)))) ? 0 : -1;
+                    game.ComputerEgo += egoDecrease;
+                }
+                else if (winner == "Computer")
+                {
+                    Console.WriteLine("The winner is Computer!");
+                    int numb = (int)Math.Round(1.0 + ((double)game.Steps / 3));
+                    int rand = rnd.Next(0, numb);
+                    int egoIncrease = Convert.ToBoolean(rand) ? 1 : 0;
+                    game.ComputerEgo += egoIncrease;
                 }
                 else
                 {
-                    Console.WriteLine($"Draw!");
+                    Console.WriteLine("Draw!");
                 }
+
+                game.Complacency(game.ComputerEgo);
+
                 Console.Write("\nPlay again? (Y/N): ");
                 string playingInput = Console.ReadLine();
 
